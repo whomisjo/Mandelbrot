@@ -17,7 +17,6 @@ ComplexPlane::ComplexPlane(float aspectRatio)
     m_view.setCenter(0.0f, 0.0f);
 }
 
-
 void ComplexPlane::zoomIn()
 {
     m_zoomCount++;
@@ -26,7 +25,6 @@ void ComplexPlane::zoomIn()
     float ySize = BASE_HEIGHT * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
 
     m_view.setSize(xSize, ySize);
-
 }
 
 void ComplexPlane::zoomOut() 
@@ -53,8 +51,8 @@ void ComplexPlane::loadText(Text& text)
 {
     stringstream ss;
     ss << "Mandelbrot Set" << endl;
-    ss << "Center: (" << m_view.getCenter().x << ", " << m_view.getCenter().y << endl;
-    ss << "Cursor: (" << m_mouseLocation.x << ", " << m_mouseLocation.y << endl;
+    ss << "Center: (" << m_view.getCenter().x << ", " << m_view.getCenter().y << ")" << endl;
+    ss << "Cursor: (" << m_mouseLocation.x << ", " << m_mouseLocation.y << ")" << endl;
     ss << "Left-click to Zoom in" << endl;
     ss << "Right-click to Zoom out" << endl;
 
@@ -72,6 +70,7 @@ size_t ComplexPlane::countIterations(Vector2f coord)
         i++;
     }
     return i;
+
 }
 
 void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
@@ -80,14 +79,14 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
     if (iterations == MAX_ITER)
     {
         r = 0;
-        g = 0;
+        g = 69;
         b = 0;
     }
     else
     {
-        r = (255 * iterations) / MAX_ITER;
+        r = 0;
         g = (255 * iterations) / MAX_ITER;
-        b = 255 - (255 * iterations) / MAX_ITER;
+        b = 0;
     }
 }
 
