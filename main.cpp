@@ -26,7 +26,7 @@ int main()
     };
     State state = State::CALCULATING;
  
-    ComplexPlane complexPlane;
+    ComplexPlane complexPlane(aspectRatio);
     sf::VertexArray vArray(sf::Points, desktop.width* desktop.height);
 
     while (window.isOpen())
@@ -38,21 +38,20 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
             else if (event.type == sf::Event::MouseButtonPressed)
             {
-                const sf::Vector2f complexPlaneClick = complexPlane.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), window);
-
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    complexPlane.zoomIn(complexPlaneClick);
+                    complexPlane.zoomIn();
                 }
                 else if (event.mouseButton.button == sf::Mouse::Right)
                 {
-                    complexPlane.zoomOut(complexPlaneClick);
+                    complexPlane.zoomOut();
                 }
             }
             else if (event.type == sf::Event::MouseMoved)
             {
-                const sf::Vector2f complexPlaneMouse = complexPlane.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y), window);
-                complexPlane.setMouseLocation(complexPlaneMouse);
+                sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+                sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+                complexPlane.setMouseLocation(worldPos);
             }
         }
 
@@ -84,3 +83,4 @@ int main()
         window.display();   
     }
 }
+
