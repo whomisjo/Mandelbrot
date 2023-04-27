@@ -11,6 +11,8 @@ int main()
     const sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
     const float aspectRatio = static_cast<float>(desktop.height) / static_cast<float>(desktop.width);
     cout << aspectRatio;
+    int pixelWidth = desktop.width;
+    int pixelHeight = desktop.height;
 
     sf::Font font;										
     font.loadFromFile("fonts/KOMIKAP_.ttf");
@@ -27,11 +29,11 @@ int main()
     State state = State::CALCULATING;
  
     ComplexPlane complexPlane(aspectRatio);
-    sf::VertexArray vArray(sf::Points, desktop.width* desktop.height);
+    sf::VertexArray vArray(sf::Points, desktop.width * desktop.height);
 
+    
     while (window.isOpen())
     {
-        window.display();
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -41,10 +43,12 @@ int main()
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     complexPlane.zoomIn();
+                    state = State::CALCULATING;
                 }
                 else if (event.mouseButton.button == sf::Mouse::Right)
                 {
                     complexPlane.zoomOut();
+                    state = State::CALCULATING;
                 }
             }
             else if (event.type == sf::Event::MouseMoved)
@@ -57,8 +61,7 @@ int main()
 
         if (state == State::CALCULATING)
         {
-            int pixelWidth = desktop.width;
-            int pixelHeight = desktop.height;
+            
             for (int i = 0; i < pixelHeight; i++)
             {
                 for (int j = 0; j < pixelWidth; j++)
@@ -66,21 +69,23 @@ int main()
                     vArray[j + i * pixelWidth].position = { (float)j,(float)i };
 
                     sf::Vector2f coord = window.mapPixelToCoords(sf::Vector2i(j, i), complexPlane.getView());
-                    int iterations = complexPlane.countIterations(coord);
+                    size_t iterations = complexPlane.countIterations(coord);
                     Uint8 r, g, b;
                     complexPlane.iterationsToRGB(iterations, r, g, b);
+                    
 
                     vArray[j + i * pixelWidth].color = { r,g,b };
                 }
             }
-            state = State::DISPLAYING;
-            complexPlane.loadText(text);
+            state = State::DISPLAYING; 
         }
 
+        complexPlane.loadText(text);
         window.clear();
         window.draw(vArray);
         window.draw(text);
         window.display();   
     }
 }
+
 
