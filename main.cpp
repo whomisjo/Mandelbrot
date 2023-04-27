@@ -40,15 +40,20 @@ int main()
             if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
             else if (event.type == sf::Event::MouseButtonPressed)
             {
+                sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+                sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos, complexPlane.getView());
+
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     complexPlane.zoomIn();
                     state = State::CALCULATING;
+                    complexPlane.setCenter(worldPos);
                 }
                 else if (event.mouseButton.button == sf::Mouse::Right)
                 {
                     complexPlane.zoomOut();
                     state = State::CALCULATING;
+                    complexPlane.setCenter(worldPos);
                 }
             }
             else if (event.type == sf::Event::MouseMoved)
@@ -87,5 +92,4 @@ int main()
         window.display();   
     }
 }
-
 
